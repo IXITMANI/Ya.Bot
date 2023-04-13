@@ -1,0 +1,31 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N803" />
+          <option value="N801" />
+          <option value="N802" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="PyQt5.QtWidgets.clicked.connect" />
+          <option value="int.setText" />
+          <option value="PyQt5.QtGui.QFont.PreferDefault" />
+          <option value="PyQt5.QtCore.Qt.PreventContextMenu" />
+          <option value="main.Ui_Dialog.successes" />
+          <option value="PyQt5.QtWidgets.QTextBrowser.text" />
+          <option value="main.Ui_Dialog.res_password_repeat" />
+          <option value="main.Ui_Dialog.res_password" />
+          <option value="main.Ui_Dialog.retranslateUi" />
+          <option value="PyQt5.QtWidgets.QTextEdit.text" />
+          <option value="main.Ui_Dialog.reg_password_repeat" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
