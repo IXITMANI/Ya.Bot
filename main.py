@@ -1,5 +1,6 @@
 import disnake
 from disnake.ext import commands
+import youtube_dl
 
 bot = commands.Bot(command_prefix='!', intents=disnake.Intents.all(),
                    activity=disnake.Game('попе пальчиком', status=disnake.Status.online))
@@ -31,6 +32,10 @@ async def test(inter):
                           color=disnake.Color.dark_blue())
     await inter.send(embed=embed)
 
+
+@bot.slash_command()
+async def play(inter):
+    ...
 
 token = ''
 tmp = open('token', 'r').readline()
