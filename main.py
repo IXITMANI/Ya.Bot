@@ -27,8 +27,13 @@ async def server(inter):
 
 @bot.slash_command()
 async def test(inter):
-    embed = disnake.Embed(title="Title", description="description", url="https://yandex.ru", color=disnake.Color.dark_blue())
+    embed = disnake.Embed(title="Title", description="description", url="https://yandex.ru",
+                          color=disnake.Color.dark_blue())
     await inter.send(embed=embed)
 
-token = open('token', 'r').readline()
+
+token = ''
+tmp = open('token', 'r').readline()
+for item in tmp:
+    token += chr(ord(item) - 5)
 bot.run(token)
