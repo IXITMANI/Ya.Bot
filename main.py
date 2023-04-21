@@ -2,8 +2,7 @@ import disnake
 from disnake.ext import commands
 import youtube_dl
 
-bot = commands.Bot(command_prefix='!', intents=disnake.Intents.all(),
-                   activity=disnake.Game('попе пальчиком', status=disnake.Status.online))
+bot = commands.Bot(command_prefix='!', intents=disnake.Intents.all())
 
 bot.remove_command('help')
 
@@ -31,6 +30,20 @@ async def test(inter):
     embed = disnake.Embed(title="Title", description="description", url="https://yandex.ru",
                           color=disnake.Color.dark_blue())
     await inter.send(embed=embed)
+
+
+@bot.slash_command()
+async def question(inter, prom: str):
+    tok = 100000
+    await inter.response.defer()
+    completion = openai.Completion.create(engine="text-davinci-003",
+                                          prompt=prom,
+                                          temperature=0.5,
+                                          max_tokens=min(4000 - len(prom), tok))
+    embed = disnake.Embed(title="Ответ", description=f"{completion.choices[0]['text']}",
+                          color=disnake.Color.green())
+    print(completion.choices[0]['text'])
+    await inter.followup.send(embed=embed)
 
 
 @bot.slash_command()
