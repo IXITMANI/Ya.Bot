@@ -1,5 +1,6 @@
 import disnake
 import sqlite3
+import datetime
 from disnake.ext import commands
 
 con = sqlite3.connect("db\married.sqlite")
@@ -23,7 +24,7 @@ class WeddingCommand(commands.Cog):
             await inter.response.send_message(f'Пользователь {wife} уже замужем')
         else:
             cur.execute(f"""INSERT INTO married(id,husband, wife, date)
-                    VALUES({self.num + 1}, '{husband}', '{wife}', '123')""")
+                    VALUES({self.num + 1}, '{husband}', '{wife}', '{datetime.datetime.now().date()}')""")
             self.num += 1
             con.commit()
             await inter.response.send_message('Все из гуд')
