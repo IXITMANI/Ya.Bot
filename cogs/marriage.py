@@ -75,6 +75,51 @@ class MarriageCommand(commands.Cog):
         else:
             cur.execute(f"""DELETE FROM married WHERE husband = '{inter.author.mention}' OR wife = '{inter.author.mention}'""")
 
+    @commands.slash_command(description='вывести все браки')
+    async def marriage_info(self, inter: disnake.ApplicationCommandInteraction):
+        ans = ''
+        resp = cur.execute(f"""SELECT * from married""").fetchall()
+        for el in resp:
+            ans += f'Муж: {el[1]}, Жена: {el[2]}, Зарегистрирован: {el[3]}\n'
+        await inter.send(ans)
+
+    @commands.slash_command(description='Инфа по твоему браку')
+    async def my_marriage(self, inter: disnake.ApplicationCommandInteraction):
+        user = inter.author
+        res = cur.execute(f"""
+                                            SELECT * from married WHERE husband = '{user.mention}' OR wife = '{user.mention}'
+                                            """).fetchall()
+        if len(res) == 0:
+            await inter.send('Вы не состоите в браке')
+        elif res[0][1] == user.mention:
+            await inter.send(f'''Вы находитесь в браке с {res[0][2]}''')
+        else:
+            await inter.send(f'''Вы находитесь в браке с {res[0][1]}''')
+
+    @commands.slash_command(description='Инфа по твоему браку')
+    async def my_marriage(self, inter: disnake.ApplicationCommandInteraction):
+        user = inter.author
+        res = cur.execute(f"""
+                                                SELECT * from married WHERE husband = '{user.mention}' OR wife = '{user.mention}'
+                                                """).fetchall()
+        if len(res) == 0:
+            await inter.send('Вы не состоите в браке')
+        elif res[0][1] == user.mention:
+            await inter.send(f'''Вы находитесь в браке с {res[0][2]}''')
+        else:
+            await inter.send(f'''Вы находитесь в браке с {res[0][1]}''')
+
+    @commands.slash_command(description='Инфа по браку юзера')
+    async def check_marriage(self, inter: disnake.ApplicationCommandInteraction, member: disnake.Member):
+        res = cur.execute(f"""
+                                            SELECT * from married WHERE husband = '{member.mention}' OR wife = '{member.mention}'
+                                            """).fetchall()
+        if len(res) == 0:
+            await inter.send(f'''Этот пользователь не состоит в браке''')
+        elif res[0][1] == member.mention:
+            await inter.send(f'''Пользователь {member.mention} в браке с {res[0][2]}''')
+        else:
+            await inter.send(f'''Пользователь {member.mention} в браке с {res[0][1]}''')
 
 def setup(bot: commands.Bot):
     bot.add_cog(MarriageCommand(bot))
