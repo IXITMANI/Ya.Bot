@@ -1,3 +1,4 @@
+import asyncio
 import disnake
 import requests
 from disnake.ext import commands
@@ -151,6 +152,27 @@ async def question(inter, вопрос: str):
         icon_url="https://avatars.mds.yandex.net/i?id=d0bb10ef328847ecd137d5813a022aad14eafa96-5714527-images-thumbs&ref=rim&n=33&w=150&h=150",
     )
     await inter.followup.send(embed=embed)
+
+
+@bot.slash_command()
+async def buttons(inter: disnake.ApplicationCommandInteraction, member: disnake.Member):
+    await inter.response.send_message(
+        f"Вы хотите пожениться {member.mention}",
+        components=[
+            disnake.ui.Button(label="Yes", style=disnake.ButtonStyle.success, custom_id="yes"),
+            disnake.ui.Button(label="No", style=disnake.ButtonStyle.danger, custom_id="no"),
+        ],
+    )
+
+
+@bot.listen("on_button_click")
+async def help_listener(inter: disnake.MessageInteraction):
+    if inter.component.custom_id not in ["yes", "no"]:
+        return
+    if inter.component.custom_id == "yes":
+        await inter.send("Если нажата да")
+    elif inter.component.custom_id == "no":
+        await inter.send("Если нажата нет")
 
 
 token = ''
