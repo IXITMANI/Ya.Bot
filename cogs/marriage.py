@@ -133,17 +133,6 @@ class MarriageCommand(commands.Cog):
             embed.set_author(name=str(inter.author)[:-5], icon_url=inter.author.display_avatar.url)
             await inter.send(embed=embed, delete_after=7)
 
-    @commands.slash_command(description='Инфа по браку юзера')
-    async def check_marriage(self, inter: disnake.ApplicationCommandInteraction, member: disnake.Member):
-        res = cur.execute(f"""
-                                            SELECT * from married WHERE husband = '{member.mention}' OR wife = '{member.mention}'
-                                            """).fetchall()
-        if len(res) == 0:
-            await inter.send(f'''Этот пользователь не состоит в браке''')
-        elif res[0][1] == member.mention:
-            await inter.send(f'''Пользователь {member.mention} в браке с {res[0][2]}, зарегистрированным {res[0][3]}''')
-        else:
-            await inter.send(f'''Пользователь {member.mention} в браке с {res[0][1]}, зарегистрированным {res[0][3]}''')
 
 def setup(bot: commands.Bot):
     bot.add_cog(MarriageCommand(bot))
