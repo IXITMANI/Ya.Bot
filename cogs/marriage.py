@@ -130,7 +130,9 @@ class MarriageCommand(commands.Cog):
                               color=disnake.Color.random())
         embed.set_author(name=inter.author.display_name, icon_url=inter.author.display_avatar.url)
         for el in resp:
-            embed.add_field(name=f'Муж: {el[1]}, Жена: {el[2]}, Зарегистрирован: {el[3]}', value="", inline=False)
+            embed.add_field(
+                name=f'Муж: {inter.guild.get_member(int(el[1][2:-1]))}, Жена: {inter.guild.get_member(int(el[2][2:-1]))}, Зарегистрирован: {el[3]}',
+                value="", inline=False)
         await inter.send(embed=embed, delete_after=60)
 
     @commands.slash_command(description='Инфа по твоему браку')  # Решу завтра
