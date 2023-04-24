@@ -18,16 +18,16 @@ class MarriageCommand(commands.Cog):
         else:
             self.num = cur.execute("""SELECT * FROM married""").fetchall()[-1][0]
 
-    def check(self, user: disnake.ApplicationCommandInteraction.author):
+    def check(self, user: disnake.ApplicationCommandInteraction.author, inter):
         res = cur.execute(f"""
                                     SELECT * from married WHERE husband = '{user.mention}' OR wife = '{user.mention}'
                                     """).fetchall()
         if len(res) == 0:
             return None
         elif res[0][1] == user.mention:
-            return f'''Пользователь {user.display_name} уже в браке с {res[0][2]}'''
+            return f'''Пользователь {user.display_name} уже в браке с {inter.guild.get_member(int(res[0][2][2:-1])).display_name}'''
         else:
-            return f'''Пользователь {user.display_name} уже в браке с {res[0][1]}'''
+            return f'''Пользователь {user.display_name} уже в браке с {inter.guild.get_member(int(res[0][1])).display_name}'''
 
     @commands.slash_command()
     async def marriage(self, inter: disnake.ApplicationCommandInteraction, жена: disnake.Member):
@@ -39,14 +39,14 @@ class MarriageCommand(commands.Cog):
             await inter.send(embed=embed, ephemeral=True)
         else:
             self.a_url = inter.author.display_avatar.url
-            ans = self.check(inter.author)
+            ans = self.check(inter.author, inter)
             if ans:
                 embed = disnake.Embed(title=f"{ans}",
                                       color=disnake.Color.random())
                 embed.set_author(name=str(self.husband)[:-5], icon_url=inter.author.display_avatar.url)
                 await inter.send(embed=embed, delete_after=7, ephemeral=True)
                 return
-            ans = self.check(member)
+            ans = self.check(member, inter)
             if ans:
                 embed = disnake.Embed(title=f"{ans}",
                                       color=disnake.Color.random())
@@ -100,7 +100,7 @@ class MarriageCommand(commands.Cog):
 
     @commands.slash_command(description='расторжение брака')
     async def divorce(self, inter: disnake.ApplicationCommandInteraction):
-        ans = self.check(inter.author)
+        ans = self.check(inter.author, inter)
         res = cur.execute(f"""
                                                     SELECT * from married WHERE husband = '{inter.author.mention}' OR wife = '{inter.author.mention}'
                                                     """).fetchall()
