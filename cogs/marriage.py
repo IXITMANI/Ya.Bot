@@ -20,40 +20,52 @@ class MarriageCommand(commands.Cog):
 
     def check(self, user: disnake.ApplicationCommandInteraction.author):
         res = cur.execute(f"""
-                                    SELECT * from married WHERE husband = '{user.mention}' OR wife = '{user.mention}'
+                                    SELECT * from married WHERE husband = '{user}' OR wife = '{user}'
                                     """).fetchall()
         if len(res) == 0:
             return None
-        elif res[0][1] == user.mention:
-            return f'''Пользователь {user.mention} уже в браке с {res[0][2]}'''
+        elif res[0][1] == str(user):
+            return f'''Пользователь {user} уже в браке с {res[0][2]}'''
         else:
-            return f'''Пользователь {user.mention} уже в браке с {res[0][1]}'''
+            return f'''Пользователь {user} уже в браке с {res[0][1]}'''
 
     @commands.slash_command()
     async def marriage(self, inter: disnake.ApplicationCommandInteraction, member: disnake.Member):
-        self.a_url = inter.author.display_avatar.url
-        ans = self.check(inter.author)
-        if ans:
-            await inter.send(ans)
-            return
-        ans = self.check(member)
-        if ans:
-            await inter.send(ans)
-            return
+        if inter.author == member:
+            embed = disnake.Embed(title=f"Нельзя самому с собой же в брак вступить",
+                                  color=disnake.Color.random())
+            embed.set_author(name=str(self.husband)[:-5], icon_url=inter.author.display_avatar.url)
+            await inter.send(embed=embed, ephemeral=True)
+        else:
+            self.a_url = inter.author.display_avatar.url
+            ans = self.check(inter.author)
+            if ans:
+                embed = disnake.Embed(title=f"{ans}",
+                                      color=disnake.Color.random())
+                embed.set_author(name=str(self.husband)[:-5], icon_url=inter.author.display_avatar.url)
+                await inter.send(embed=embed, delete_after=7, ephemeral=True)
+                return
+            ans = self.check(member)
+            if ans:
+                embed = disnake.Embed(title=f"{ans}",
+                                      color=disnake.Color.random())
+                embed.set_author(name=str(self.husband)[:-5], icon_url=inter.author.display_avatar.url)
+                await inter.send(embed=embed, delete_after=7, ephemeral=True)
+                return
 
-        self.husband = inter.author
-        self.wife = member
-        embed = disnake.Embed(title=f"Предлагает вам вступить в брак",
-                              color=disnake.Color.random())
-        embed.set_author(name=str(self.husband)[:-5], icon_url=inter.author.display_avatar.url)
-        await inter.send(
-            f'||{member.mention}||',
-            embed=embed,
-            components=[
-                disnake.ui.Button(label="Да", style=disnake.ButtonStyle.success, custom_id="yes"),
-                disnake.ui.Button(label="Нет", style=disnake.ButtonStyle.danger, custom_id="no"),
-            ], delete_after=30
-        )
+            self.husband = inter.author
+            self.wife = member
+            embed = disnake.Embed(title=f"Предлагает вам вступить в брак",
+                                  color=disnake.Color.random())
+            embed.set_author(name=str(self.husband)[:-5], icon_url=inter.author.display_avatar.url)
+            await inter.send(
+                f'||{member.mention}||',
+                embed=embed,
+                components=[
+                    disnake.ui.Button(label="Да", style=disnake.ButtonStyle.success, custom_id="yes"),
+                    disnake.ui.Button(label="Нет", style=disnake.ButtonStyle.danger, custom_id="no"),
+                ], delete_after=30
+            )
 
     @commands.Cog.listener("on_button_click")
     async def help_listener(self, inter: disnake.MessageInteraction):
@@ -71,7 +83,7 @@ class MarriageCommand(commands.Cog):
             embed.set_author(name=str(self.husband)[:-5], icon_url=self.a_url)
             await inter.send(embed=embed, delete_after=7)
             cur.execute(f"""INSERT INTO married(id,husband, wife, date)
-                               VALUES({self.num + 1}, '{self.husband.mention}', '{self.wife.mention}', '{datetime.datetime.now().date()}')""")
+                               VALUES({self.num + 1}, '{self.husband}', '{self.wife}', '{datetime.datetime.now().date()}')""")
             self.num += 1
             con.commit()
 
@@ -114,7 +126,7 @@ class MarriageCommand(commands.Cog):
     async def my_marriage(self, inter: disnake.ApplicationCommandInteraction):
         user = inter.author
         res = cur.execute(f"""
-                                            SELECT * from married WHERE husband = '{user.mention}' OR wife = '{user.mention}'
+                                            SELECT * from married WHERE husband = '{user}' OR wife = '{user}'
                                             """).fetchall()
         print(res)
         if len(res) == 0:
@@ -122,28 +134,38 @@ class MarriageCommand(commands.Cog):
                                   color=disnake.Color.random())
             embed.set_author(name=str(inter.author)[:-5], icon_url=inter.author.display_avatar.url)
             await inter.send(embed=embed, delete_after=7)
-        elif res[0][1] == user.mention:
-            embed = disnake.Embed(title=f'Вы находитесь в браке с {res[0][2]}',  # Решу завтра
+        elif res[0][1] == str(user):
+            embed = disnake.Embed(title=f'Вы находитесь в браке с {res[0][2]}',
                                   color=disnake.Color.random())
             embed.set_author(name=str(inter.author)[:-5], icon_url=inter.author.display_avatar.url)
             await inter.send(embed=embed, delete_after=7)
         else:
-            embed = disnake.Embed(title=f'Вы находитесь в браке с {res[0][1]}',  # Решу завтра
+            embed = disnake.Embed(title=f'Вы находитесь в браке с {res[0][1]}',
                                   color=disnake.Color.random())
             embed.set_author(name=str(inter.author)[:-5], icon_url=inter.author.display_avatar.url)
             await inter.send(embed=embed, delete_after=7)
 
-    @commands.slash_command(description='Инфа по браку юзера')
+    @commands.slash_command(description='Информация по браку юзера')
     async def check_marriage(self, inter: disnake.ApplicationCommandInteraction, member: disnake.Member):
         res = cur.execute(f"""
-                                            SELECT * from married WHERE husband = '{member.mention}' OR wife = '{member.mention}'
+                                            SELECT * from married WHERE husband = '{member}' OR wife = '{member}'
                                             """).fetchall()
         if len(res) == 0:
-            await inter.send(f'''Этот пользователь не состоит в браке''')
-        elif res[0][1] == member.mention:
-            await inter.send(f'''Пользователь {member.mention} в браке с {res[0][2]}''')
+            embed = disnake.Embed(title=f"Холостяк",
+                                  color=disnake.Color.random())
+            embed.set_author(name=str(member)[:-5], icon_url=member.display_avatar.url)
+            await inter.send(embed=embed, delete_after=7)
+        elif res[0][1] == str(member):
+            embed = disnake.Embed(title=f'В браке с {res[0][2]}',
+                                  color=disnake.Color.random())
+            embed.set_author(name=str(member)[:-5], icon_url=member.display_avatar.url)
+            await inter.send(embed=embed, delete_after=7)
         else:
-            await inter.send(f'''Пользователь {member.mention} в браке с {res[0][1]}''')
+            embed = disnake.Embed(title=f'В браке с {res[0][1]}',
+                                  color=disnake.Color.random())
+            embed.set_author(name=str(member)[:-5], icon_url=member.display_avatar.url)
+            await inter.send(embed=embed, delete_after=7)
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(MarriageCommand(bot))
