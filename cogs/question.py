@@ -18,7 +18,7 @@ class QuestionCommand(commands.Cog):
                                               temperature=0.5,
                                               max_tokens=1_000)
 
-        embed = disnake.Embed(title="Ответ", description=f"{completion.choices[0]['text']}",
+        embed = disnake.Embed(title=prom.capitalize(), description=f"{completion.choices[0]['text']}",
                               color=disnake.Color.green())
         embed.set_author(
             name="Умнейший бот",

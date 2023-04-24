@@ -28,7 +28,7 @@ class HelpCommand(commands.Cog):
             inline=False
         )
         embed.add_field(
-            name="/question.py",
+            name="/question",
             value="Задай вопрос а бот на него ответит",
             inline=False
         )
