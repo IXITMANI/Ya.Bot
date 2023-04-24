@@ -13,6 +13,52 @@ class HelpCommand(commands.Cog):
         embed = disnake.Embed(title="Список команд",
                               color=disnake.Color.random())
         embed.add_field(
+            name="/marriage",
+            value="Отправляет предложение вступить в брак с пользователем",
+            inline=False
+        )
+        embed.add_field(
+            name="/divorce",
+            value="Подать заявление о расторжении брака",
+            inline=False
+        )
+        embed.add_field(
+            name="/marriage_info",
+            value="Список всех браков когда либо заключенных",
+            inline=False
+        )
+        embed.add_field(
+            name="/my_marriage",
+            value="Информация о твоем браке",
+            inline=False
+        )
+        embed.add_field(
+            name="/check_marriage",
+            value="Информация о браке другого человека",
+            inline=False
+        )
+        embed.add_field(
+            name="/save",
+            value="Сохраняет картинку",
+            inline=False
+        )
+        embed.add_field(
+            name="/photo",
+            value="Отправляет сохраненную картинку",
+            inline=False
+        )
+        embed.add_field(
+            name="/allpic",
+            value="Список всех картинок",
+            inline=False
+        )
+        embed.add_field(
+            name="/delete",
+            value="Удаляет картинку",
+            inline=False
+        )
+
+        embed.add_field(
             name="/cat",
             value="Присылает милого котика",
             inline=False
