@@ -13,12 +13,13 @@ class QuestionCommand(commands.Cog):
     async def question(self, inter, вопрос: str):
         prom = вопрос
         await inter.response.defer()
-        completion = openai.Completion.create(engine="text-davinci-003",
-                                              prompt=prom,
-                                              temperature=0.5,
-                                              max_tokens=1_000)
+        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",
+                                                  messages=[
+                                                      {"role": "user",
+                                                       "content": f"{prom}"}
+                                                  ])
 
-        embed = disnake.Embed(title=prom.capitalize(), description=f"{completion.choices[0]['text']}",
+        embed = disnake.Embed(title=prom.capitalize(), description=f"{completion.choices[0].message.content}",
                               color=disnake.Color.green())
         embed.set_author(
             name="Умнейший бот",
