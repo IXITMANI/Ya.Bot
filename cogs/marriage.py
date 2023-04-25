@@ -27,7 +27,7 @@ class MarriageCommand(commands.Cog):
         elif res[0][1] == user.mention:
             return f'''Пользователь {user.display_name} уже в браке с {inter.guild.get_member(int(res[0][2][2:-1])).display_name}'''
         else:
-            return f'''Пользователь {user.display_name} уже в браке с {inter.guild.get_member(int(res[0][1])).display_name}'''
+            return f'''Пользователь {user.display_name} уже в браке с {inter.guild.get_member(int(res[0][1][2:-1])).display_name}'''
 
     @commands.slash_command()
     async def marriage(self, inter: disnake.ApplicationCommandInteraction, жена: disnake.Member):
@@ -114,7 +114,6 @@ class MarriageCommand(commands.Cog):
             self.husband = inter.guild.get_member(int(res[0][1][2:-1]))
             await self.husband.remove_roles(inter.guild.get_role(1100092860210090054))
             await self.wife.remove_roles(inter.guild.get_role(1100088795652702218))
-            # await self.wife.remove_roles(inter.guild.get_role(1100092860210090054))
             embed = disnake.Embed(title=f"Брак успешно расторгнут",
                                   color=disnake.Color.random())
             embed.set_author(name=inter.author.display_name, icon_url=inter.author.display_avatar.url)
