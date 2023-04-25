@@ -9,7 +9,7 @@ class ServerCommand(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.slash_command()
+    @commands.slash_command(description='Информация о сервере')
     async def server(self, inter):
         embed = disnake.Embed(
             color=disnake.Color.random()
