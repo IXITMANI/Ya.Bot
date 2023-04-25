@@ -10,32 +10,32 @@ git clone https://github.com/IXITMANI/Ya.Bot.git
 
 <h2> Использование </h2>
 
-<h3>/help</h3><br>
+<h3>/help</h3>
 Показывает список команд<br>
 
-<h3>/marriage</h3><br>
+<h3>/marriage</h3>
 Отправляет предложение вступить в брак с пользователем<br>
-<h3>/divorce</h3><br>
+<h3>/divorce</h3>
 Подать заявление о расторжении брака<br>
-<h3>/marriage_info</h3><br>
+<h3>/marriage_info</h3>
 Список всех браков когда либо заключенных<br>
-<h3>/my_marriage</h3><br>
+<h3>/my_marriage</h3>
 Информация о твоем браке<br>
-<h3>/check_marriage</h3><br>
+<h3>/check_marriage</h3>
 Информация о браке другого человека<br>
-<h3>/save</h3><br>
+<h3>/save</h3>
 Сохраняет картинку<br>
-<h3>/photo</h3><br>
+<h3>/photo</h3>
 Отправляет сохраненную картинку<br>
-<h3>/allpic</h3><br>
+<h3>/allpic</h3>
 Список всех картинок<br>
-<h3>/delete</h3><br>
+<h3>/delete</h3>
 Удаляет картинку<br>
-<h3>/cat</h3><br>
+<h3>/cat</h3>
 Присылает милого котика<br>
-<h3>/dog</h3><br>
+<h3>/dog</h3>
 Присылает милого пёсика<br>
-<h3>/server</h3><br>
+<h3>/server</h3>
 Данные о сервере<br>
-<h3>/question</h3><br>
+<h3>/question</h3>
 Задай вопрос а бот на него ответит<br></h3>
